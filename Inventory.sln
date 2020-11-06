@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30225.117
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Inventory", "Inventory\Inventory.csproj", "{6D0848AD-6362-4788-8923-8DADD69E2E2D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Inventory", "Inventory\Inventory.csproj", "{6D0848AD-6362-4788-8923-8DADD69E2E2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entities", "Entities\Entities.csproj", "{50FDAD98-C7B0-403F-994C-5E6D0300D879}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccess", "DataAccess\DataAccess.csproj", "{4A15B394-BDCC-4589-A3EF-594D9A7D082C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{6D0848AD-6362-4788-8923-8DADD69E2E2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D0848AD-6362-4788-8923-8DADD69E2E2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D0848AD-6362-4788-8923-8DADD69E2E2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{50FDAD98-C7B0-403F-994C-5E6D0300D879}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{50FDAD98-C7B0-403F-994C-5E6D0300D879}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{50FDAD98-C7B0-403F-994C-5E6D0300D879}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{50FDAD98-C7B0-403F-994C-5E6D0300D879}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A15B394-BDCC-4589-A3EF-594D9A7D082C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A15B394-BDCC-4589-A3EF-594D9A7D082C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A15B394-BDCC-4589-A3EF-594D9A7D082C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A15B394-BDCC-4589-A3EF-594D9A7D082C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
