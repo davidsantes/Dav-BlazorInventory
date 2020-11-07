@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccess.Migrations
 {
-    [DbContext(typeof(InventaryContext))]
+    [DbContext(typeof(InventoryContext))]
     [Migration("20201107185723_AddData")]
     partial class AddData
     {
