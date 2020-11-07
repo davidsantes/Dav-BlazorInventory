@@ -1,5 +1,6 @@
 ﻿using Entities;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace DataAccess
 {
@@ -10,5 +11,55 @@ namespace DataAccess
         public DbSet<InputOutputEntity> InOuts { get; set; }
         public DbSet<WarehouseEntity> Warehouses { get; set; }
         public DbSet<StorageEntity> Storages { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder options)
+        {
+            if (!options.IsConfigured)
+            {
+                options.UseSqlServer("Server=.\\SQLEXPRESS; Database=InventoryDb; Integrated Security=True");
+            }
+        }
+
+        /// <summary>
+        /// Podemos realizar una carga inicial de datos
+        /// </summary>
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<CategoryEntity>().HasData(
+                new CategoryEntity { CategoryId = "ASH", CategoryName = "Aseo Hogar"},
+                new CategoryEntity { CategoryId = "ASP", CategoryName = "Aseo Personal" },
+                new CategoryEntity { CategoryId = "HGR", CategoryName = "Hogar" },
+                new CategoryEntity { CategoryId = "PRF", CategoryName = "Perfumería" },
+                new CategoryEntity { CategoryId = "SLD", CategoryName = "Salud" },
+                new CategoryEntity { CategoryId = "VDJ", CategoryName = "Video Juegos" }
+                );
+
+            //modelBuilder.Entity<WarehouseEntity>().HasData(
+            //    new WarehouseEntity { WarehouseId = Guid.NewGuid().ToString(), WarehouseName = "Bodega Central", WarehouseAddress = "Calle 8 con 23" },
+            //    new WarehouseEntity { WarehouseId = Guid.NewGuid().ToString(), WarehouseName = "Bodega Norte", WarehouseAddress = "Calle norte con occidente" }
+            //    );
+
+            modelBuilder.Entity<WarehouseEntity>().HasData(
+                new WarehouseEntity()
+                {
+                    WarehouseId = Guid.NewGuid().ToString(),
+                    WarehouseName = "Main Warehouse",
+                    WarehouseAddress = "932 Pallet Street, La Grange, NY 12540"
+                },
+                new WarehouseEntity()
+                {
+                    WarehouseId = Guid.NewGuid().ToString(),
+                    WarehouseName = "Second Warehouse",
+                    WarehouseAddress = "4447 Dane Street, Yakima, WA 98908"
+                },
+                new WarehouseEntity()
+                {
+                    WarehouseId = Guid.NewGuid().ToString(),
+                    WarehouseName = "Third Warehouse",
+                    WarehouseAddress = "3003 Arrowood Drive, Jacksonville, FL 32257"
+                });
+        }
     }
 }

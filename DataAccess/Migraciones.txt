@@ -1,0 +1,31 @@
+﻿/********************************** PASOS PARA CREAR LA BASE DE DATOS ***************************************/
+
+01. Añadir los paquetes necesarios para hacer migraciones:
+- Microsoft.EntityFrameworkCore.SqlServer
+- Microsoft.EntityFrameworkCore.Tools
+
+02. Seleccionar el proyecto DataAccess como proyecto de inicio para poder hacer las migraciones (sólo de manera temporal)
+
+03. Ir a Package manager console, y seleccionar el proyecto DataAcces
+
+04.- Crearemos el proyecto de migración, ejecutando en el Package Manager Console:
+add-migration FirstMigration -s DataAccess
+
+Con “-s” indicamos que utilice el ensamblado DataAccess como Startup y asi no debemos estar cambiando en Visual Studio nuestro proyecto de inicio cada vez que necesitemos hacer una migración.
+
+05. Al ejecutar nos creará el .cs con las migraciones. Todavía no está creada la base de datos dentro del motor de base de datos.
+
+06. Configurar datos de prueba en InventaryContext.OnModelCreating
+
+07. Crearemos la base de datos, ejecutando en el Package Manager Console:
+update-database
+
+Habrá creado la base de datos en el SQL Server especificado en InventaryContext.OnConfiguring
+
+08. Añadir los datos a la base de datos configurados en InventaryContext.OnModelCreating, ejecutando en el Package Manager Console:
+add-migration AddData
+
+09. Actualizar los datos en la base de datos configurados anteriormente, ejecutando en el Package Manager Console:
+update-database
+
+Habrá insertado los datos en la base de datos
