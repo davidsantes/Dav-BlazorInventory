@@ -1,9 +1,10 @@
 ﻿using Business.Interfaces;
+using DataAccess;
 using Entities;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DataAccess
+namespace Business
 {
     public class ProductService : ICrudDataService<ProductEntity>
     {
@@ -12,6 +13,14 @@ namespace DataAccess
             using (var db = new InventoryContext())
             {
                 return db.Products.ToList();
+            }
+        }
+
+        public ProductEntity ItemById(string id)
+        {
+            using (var db = new InventoryContext())
+            {
+                return db.Products.ToList().LastOrDefault(item => item.ProductId == id);
             }
         }
 

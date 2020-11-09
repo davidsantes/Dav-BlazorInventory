@@ -1,0 +1,43 @@
+﻿@using Entities;
+@using Business.Interfaces
+
+@inject ICrudDataService<CategoryEntity> categoryService
+
+@if (categories == null)
+{
+    <p><em>Cargando...</em></p>
+}
+else
+{
+    <table id="categoriesTable" class="display table table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>Referencia</th>
+                <th>Categoría</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var category in categories)
+            {
+                <tr>
+                    <td>@category.CategoryId</td>
+                    <td>@category.CategoryName</td>
+                    <td><a href="category/update/@category.CategoryId">Editar</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+<hr />
+<a href="category/create">Agregar nueva categoría</a>
+<hr />
+
+@code {
+    List<CategoryEntity> categories = new List<CategoryEntity>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        categories = categoryService.ItemList();
+    }
+}

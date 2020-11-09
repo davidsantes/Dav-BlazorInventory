@@ -16,6 +16,14 @@ namespace Business
             }
         }
 
+        public CategoryEntity ItemById(string id)
+        {
+            using (var db = new InventoryContext())
+            {
+                return db.Categories.ToList().LastOrDefault(item => item.CategoryId == id);
+            }
+        }
+
         public void CreateItem(CategoryEntity item) {
             using (var db = new InventoryContext())
             {

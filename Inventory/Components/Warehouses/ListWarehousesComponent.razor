@@ -1,0 +1,43 @@
+﻿@using Entities;
+@using Business.Interfaces
+
+@inject ICrudDataService<WarehouseEntity> warehouseService
+
+<hr />
+<a href="warehouse/create">Agregar nueva bodega</a>
+<hr />
+@if (warehouses == null)
+{
+    <p><em>Cargando...</em></p>
+}
+else 
+{
+    <table id="categoriesTable" class="display table table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>Bodega</th>
+                <th>Dirección</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var warehouse in warehouses)
+            {
+                <tr>
+                    <td>@warehouse.WarehouseName</td>
+                    <td>@warehouse.WarehouseAddress</td>
+                    <td><a href="category/update/@warehouse.WarehouseId">Editar</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>   
+}
+
+@code {
+    List<WarehouseEntity> warehouses = new List<WarehouseEntity>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        warehouses = warehouseService.ItemList();
+    }
+}

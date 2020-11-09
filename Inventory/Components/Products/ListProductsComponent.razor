@@ -1,0 +1,61 @@
+﻿@using Entities;
+@using Business.Interfaces
+
+@inject ICrudDataService<ProductEntity> productService;
+@inject ICrudDataService<CategoryEntity> categoryService
+
+<hr />
+<select class="form-control" @onchange="CategoryChanged">
+    <option value="">Seleccione una categoría...</option>
+    @foreach (var category in categories)
+    {
+        <option value="@category.CategoryId">@category.CategoryName</option>
+    }
+</select>
+
+<hr />
+<table class="table table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>Referencia</th>
+            <th>Nombre producto</th>
+            <th>Descripción del producto.</th>
+            <th>Categoría</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var product in filteredProductsByCategory)
+        {
+            <tr>
+                <td>@product.ProductId</td>
+                <td>@product.ProductName</td>
+                <td>@product.ProductDescription</td>
+                <td>@product.CategoryId</td>
+                <td><a href="product/update/@product.ProductId">Editar</a></td>
+            </tr>
+        }
+    </tbody>
+</table>
+<hr />
+<a href="product/create">Agregar nuevo producto</a>
+<hr />
+
+@code {
+    List<ProductEntity> products = new List<ProductEntity>();
+    List<ProductEntity> filteredProductsByCategory = new List<ProductEntity>();
+    List<CategoryEntity> categories = new List<CategoryEntity>();
+    string message;
+
+    protected override async Task OnInitializedAsync()
+    {
+        products = productService.ItemList();
+        filteredProductsByCategory = products;
+        categories = categoryService.ItemList();
+    }
+
+    private void CategoryChanged(ChangeEventArgs e)
+    {
+        filteredProductsByCategory = products.Where(c => c.CategoryId == e.Value.ToString()).ToList();
+    }
+}
