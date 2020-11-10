@@ -1,0 +1,120 @@
+﻿@using Entities
+@using Business.Interfaces
+
+@inject NavigationManager NavManager
+@inject ICrudDataService<WarehouseEntity> warehouseService
+@inject ICrudDataService<InputOutputEntity> inputOutputService
+@inject ICrudDataServiceStorage<StorageEntity> storageService
+@inject ICrudDataService<ProductEntity> productService
+
+<h3>Entradas / salidas - nueva</h3>
+<hr />
+
+<div class="form-group">
+    <select class="form-control" @onchange="OnChangedWarehouse">
+        <option value="">Seleccione una bodega...</option>
+        @foreach (var warehouse in warehouses)
+        {
+            <option value="@warehouse.WarehouseId">@warehouse.WarehouseName</option>
+        }
+    </select>
+</div>
+<hr />
+
+<EditForm Model=@newInputOutput>
+    <div class="form-group">
+        <InputSelect @bind-Value="newInputOutput.StorageId" class="form-control">
+            <option value="">Seleccione un producto...</option>
+            @foreach (var storage in storages)
+            {
+                <option value="@storage.StorageId">@storage.Product.ProductName</option>
+            }
+        </InputSelect>
+    </div>
+    <div class="form-group">
+        <label for="Quantity">Escriba la cantidad del producto:</label>
+        <InputNumber id="Quantity" @bind-Value="newInputOutput.Quantity" class="form-control" />
+    </div>
+    <div class="form-check">
+        <InputCheckbox id="IsInput" @bind-Value="newInputOutput.IsInput" class="form-check-input" />
+        <label class="form-check-label" for="IsInput">¿Es una entrada de producto?</label>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" value=@buttonValue @onclick="@Save" />
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+<div class="text-center h4">
+    @message
+</div>
+
+@code {
+    InputOutputEntity newInputOutput = new InputOutputEntity();
+    List<WarehouseEntity> warehouses = new List<WarehouseEntity>();
+    List<StorageEntity> storages = new List<StorageEntity>();
+
+    ProductEntity currentProduct = new ProductEntity();
+    StorageEntity currentStorage = new StorageEntity();
+
+    string buttonValue => newInputOutput.IsInput ? "Registrar entrada" : "Registrar salida";
+    string message;
+
+    protected override async Task OnInitializedAsync()
+    {
+        warehouses = warehouseService.ItemList();
+    }
+
+    private void OnChangedWarehouse(ChangeEventArgs e)
+    {
+        var idWarehouse = e.Value.ToString();
+
+        storages = storageService.ItemListByWarehouse(idWarehouse);
+    }
+
+    private void Save()
+    {
+        currentStorage = storages.LastOrDefault(s => s.StorageId == newInputOutput.StorageId);
+        currentProduct = currentStorage.Product;
+
+        if (newInputOutput.IsInput)
+        {
+            currentStorage.PartialQuantity = currentStorage.PartialQuantity + newInputOutput.Quantity;
+            storageService.UpdateItem(currentStorage);
+
+            currentProduct.TotalQuantity = currentProduct.TotalQuantity + newInputOutput.Quantity;
+            productService.UpdateItem(currentProduct);
+
+            message = $"El producto {currentProduct.ProductName} ha sido actualizado correctamente";
+        }
+        else
+        {
+            if (IsBiggerThanZero(newInputOutput.Quantity, currentStorage.PartialQuantity))
+            {
+                currentStorage.PartialQuantity = currentStorage.PartialQuantity - newInputOutput.Quantity;
+                storageService.UpdateItem(currentStorage);
+
+                currentProduct.TotalQuantity = currentProduct.TotalQuantity - newInputOutput.Quantity;
+                productService.UpdateItem(currentProduct);
+
+                message = $"El producto {currentProduct.ProductName} ha sido actualizado correctamente";
+            }
+            else
+            {
+                message = $"No existe la cantidad suficiente en bodega para el producto {currentProduct.ProductName}";
+            }
+        }
+    }
+
+    private bool IsBiggerThanZero(int quantity, int storageQuantity)
+    {
+        if (storageQuantity > quantity)
+            return true;
+
+        return false;
+    }
+}

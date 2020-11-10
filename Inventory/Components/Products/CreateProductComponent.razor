@@ -1,47 +1,55 @@
 ﻿@using Entities
 @using Business.Interfaces
 
+@inject NavigationManager NavManager
 @inject ICrudDataService<ProductEntity> productService
 @inject ICrudDataService<CategoryEntity> categoryService
 
-<div>
-    <EditForm Model=@newProduct>
-        <DataAnnotationsValidator />
-        <div class="form-group">
-            <label for="ProductId">Referencia:</label>
-            <InputText id="ProductId" @bind-Value="newProduct.ProductId" class="form-control" />
-            <ValidationMessage For="@(() => newProduct.ProductId)" class="text-danger" />
+<h3>Producto - nuevo</h3>
+<hr />
+
+<EditForm Model=@newProduct>
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="ProductId">Referencia:</label>
+        <InputText id="ProductId" @bind-Value="newProduct.ProductId" class="form-control" />
+        <ValidationMessage For="@(() => newProduct.ProductId)" class="text-danger" />
+    </div>
+    <div class="form-group">
+        <label for="ProductName">Nombre del producto:</label>
+        <InputText id="ProductName" @bind-Value="newProduct.ProductName" class="form-control" />
+        <ValidationMessage For="@(() => newProduct.ProductName)" class="text-danger" />
+    </div>
+    <div class="form-group">
+        <label for="ProductDescription">Descripción:</label>
+        <InputTextArea id="ProductDescription" @bind-Value="newProduct.ProductDescription" class="form-control" />
+        <ValidationMessage For="@(() => newProduct.ProductDescription)" class="text-danger" />
+    </div>
+    <div class="form-group">
+        <label for="TotalQuantity">Cantidad de producto:</label>
+        <InputNumber id="TotalQuantity" @bind-Value="newProduct.TotalQuantity" class="form-control" />
+        <ValidationMessage For="@(() => newProduct.TotalQuantity)" class="text-danger" />
+    </div>
+    <div class="form-group">
+        <label>Categoría:</label>
+        <InputSelect @bind-Value="newProduct.CategoryId" class="form-control">
+            <option value="">Seleccione una categoría...</option>
+            @foreach (var category in categories)
+            {
+                <option value="@category.CategoryId">@category.CategoryName</option>
+            }
+        </InputSelect>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" value="Agregar producto" @onclick="@Save" />
+                <input type="button" class="btn btn-primary" value="Volver" @onclick="@Cancel" />
+            </div>
         </div>
-        <div class="form-group">
-            <label for="ProductName">Nombre del producto:</label>
-            <InputText id="ProductName" @bind-Value="newProduct.ProductName" class="form-control" />
-            <ValidationMessage For="@(() => newProduct.ProductName)" class="text-danger" />
-        </div>
-        <div class="form-group">
-            <label for="ProductDescription">Descripción:</label>
-            <InputTextArea id="ProductDescription" @bind-Value="newProduct.ProductDescription" class="form-control" />
-            <ValidationMessage For="@(() => newProduct.ProductDescription)" class="text-danger" />
-        </div>
-        <div class="form-group">
-            <label for="TotalQuantity">Cantidad de producto:</label>
-            <InputNumber id="TotalQuantity" @bind-Value="newProduct.TotalQuantity" class="form-control" />
-            <ValidationMessage For="@(() => newProduct.TotalQuantity)" class="text-danger" />
-        </div>
-        <div class="form-group">
-            <label>Categoría:</label>
-            <InputSelect @bind-Value="newProduct.CategoryId" class="form-control">
-                <option value="">Seleccione una categoría...</option>
-                @foreach (var category in categories)
-                {
-                    <option value="@category.CategoryId">@category.CategoryName</option>
-                }
-            </InputSelect>
-        </div>
-        <div class="form-group">
-            <input type="submit" class="btn btn-primary" value="Agregar producto" @onclick="Save" />
-        </div>
-    </EditForm>
-</div>
+    </div>
+</EditForm>
 
 @code {
     ProductEntity newProduct = new ProductEntity();
@@ -55,6 +63,11 @@
     private void Save()
     {
         productService.CreateItem(newProduct);
+    }
+
+    private void Cancel()
+    {
+        NavManager.NavigateTo("/product/list");
     }
 
     private void HandleValidSubmit()

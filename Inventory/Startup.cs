@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Inventory.Data;
 using Business;
 using Business.Interfaces;
 using System.Collections.Generic;
@@ -26,10 +25,13 @@ namespace Inventory
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
-            services.AddSingleton<WeatherForecastService>();
             
+            //Registro de las dependencias de los servicios (sería mejor cambiar el patrón singleton)
             services.AddScoped<ICrudDataService<ProductEntity>, ProductService>();
-            services.AddScoped<ICrudDataService<CategoryEntity>, CategoryService>();            
+            services.AddScoped<ICrudDataService<CategoryEntity>, CategoryService>();                  
+            services.AddScoped<ICrudDataService<WarehouseEntity>, WarehouseService>();
+            services.AddScoped<ICrudDataService<InputOutputEntity>, InputOutputService>();
+            services.AddScoped<ICrudDataServiceStorage<StorageEntity>, StorageService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

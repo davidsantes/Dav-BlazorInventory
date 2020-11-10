@@ -3,6 +3,9 @@
 
 @inject ICrudDataService<CategoryEntity> categoryService
 
+<h3>Categoría - listado</h3>
+<hr />
+
 @if (categories == null)
 {
     <p><em>Cargando...</em></p>
@@ -30,7 +33,7 @@ else
     </table>
 }
 <hr />
-<a href="category/create">Agregar nueva categoría</a>
+<a href="category/create" class="btn btn-primary">Agregar nueva categoría</a>
 <hr />
 
 @code {

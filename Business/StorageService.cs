@@ -1,18 +1,31 @@
 ﻿using Business.Interfaces;
 using DataAccess;
 using Entities;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace Business
 {
-    public class StorageService : ICrudDataService<StorageEntity>
+    public class StorageService : ICrudDataServiceStorage<StorageEntity>
     {
         public List<StorageEntity> ItemList()
         {
             using (var db = new InventoryContext())
             {
                 return db.Storages.ToList();
+            }
+        }
+
+        public List<StorageEntity> ItemListByWarehouse(string idWarehouse)
+        {
+            using (var db = new InventoryContext())
+            {
+                return db.Storages
+                    .Include(s => s.Product)
+                    .Include(s => s.Warehouse)
+                    .Where(s => s.WarehouseId == idWarehouse)
+                    .ToList();
             }
         }
 
@@ -30,6 +43,17 @@ namespace Business
             {
                 db.Storages.Add(item);
                 db.SaveChanges();
+            }
+        }
+
+        public bool IsProductInWarehouse(string idStorage)
+        {
+            using (var db = new InventoryContext())
+            {
+                var product = db.Storages.ToList()
+                    .Where(s => s.StorageId == idStorage);
+
+                return product.Any();
             }
         }
 

@@ -1,0 +1,84 @@
+﻿@using Entities
+@using Business.Interfaces
+
+@inject NavigationManager NavManager
+@inject ICrudDataService<ProductEntity> productService
+@inject ICrudDataService<CategoryEntity> categoryService
+@inject ICrudDataService<WarehouseEntity> warehouseService
+@inject ICrudDataServiceStorage<StorageEntity> storageService
+
+<h3>Almacenamiento - nuevo</h3>
+<hr />
+
+<EditForm Model=@newStorage>
+    <div class="form-group">
+        <label>Bodega:</label>
+        <InputSelect @bind-Value="newStorage.WarehouseId" class="form-control">
+            <option value="">Seleccione una bodega...</option>
+            @foreach (var warehouse in warehouses)
+            {
+                <option value="@warehouse.WarehouseId">@warehouse.WarehouseName</option>
+            }
+        </InputSelect>
+    </div>
+
+    <div class="form-group">
+        <label>Producto:</label>
+        <InputSelect @bind-Value="newStorage.ProductId" class="form-control">
+            <option value="">Seleccione una producto...</option>
+            @foreach (var product in products)
+            {
+                <option value="@product.ProductId">@product.ProductName</option>
+            }
+        </InputSelect>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" value="Almacenar producto" @onclick="@Save" />
+                <input type="button" class="btn btn-primary" value="Volver" @onclick="@Cancel" />
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+<div class="text-center h4">
+    @message
+</div>
+
+@code {
+    StorageEntity newStorage = new StorageEntity();
+
+    List<WarehouseEntity> warehouses = new List<WarehouseEntity>();
+    List<ProductEntity> products = new List<ProductEntity>();
+
+    string message;
+
+    protected override async Task OnInitializedAsync()
+    {
+        warehouses = warehouseService.ItemList();
+        products = productService.ItemList();
+    }
+
+    private void Save()
+    {
+        newStorage.StorageId = $"{newStorage.WarehouseId}-{newStorage.ProductId}";
+
+        if (!storageService.IsProductInWarehouse(newStorage.StorageId))
+        {
+            newStorage.LastUpdate = DateTime.Now;
+            storageService.CreateItem(newStorage);
+
+            message = "Producto almacenado con éxito";
+        }
+        else {
+            message = "El producto ya existe en la bodega";
+        }
+    }
+
+    private void Cancel()
+    {
+        NavManager.NavigateTo("/storage/list");
+    }
+}

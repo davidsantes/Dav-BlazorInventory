@@ -1,34 +1,35 @@
 ﻿@using Entities
 @using Business.Interfaces
 
-@inject NavigationManager NavManager;
+@inject NavigationManager NavManager
 @inject ICrudDataService<ProductEntity> productService
 @inject ICrudDataService<CategoryEntity> categoryService
 
-<div>
-    <EditForm Model="updateProduct">
-        <div class="form-group">
-            <label>Nombre del producto:</label>
-            <InputText @bind-Value="updateProduct.ProductName" class="form-control" />
-        </div>
-        <div class="form-group">
-            <label>Descripción:</label>
-            <InputTextArea @bind-Value="updateProduct.ProductDescription" class="form-control" />
-        </div>
-        <div class="form-group">
-            <label>Categoría:</label>
-            <InputSelect @bind-Value="updateProduct.CategoryId" class="form-control">
-                <option value="">Seleccione una categoría...</option>
-                @foreach (var category in categories)
-                {
-                    <option value="@category.CategoryId">@category.CategoryName</option>
-                }
-            </InputSelect>
-        </div>
+<h3>Producto - actualizar</h3>
+<hr />
 
-        <input type="button" class="btn btn-primary" value="Actualizar producto" @onclick="UpdateProduct" />
-    </EditForm>
-</div>
+<EditForm Model=@updateProduct>
+    <div class="form-group">
+        <label>Nombre del producto:</label>
+        <InputText @bind-Value="updateProduct.ProductName" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Descripción:</label>
+        <InputTextArea @bind-Value="updateProduct.ProductDescription" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label>Categoría:</label>
+        <InputSelect @bind-Value="updateProduct.CategoryId" class="form-control">
+            <option value="">Seleccione una categoría...</option>
+            @foreach (var category in categories)
+            {
+                <option value="@category.CategoryId">@category.CategoryName</option>
+            }
+        </InputSelect>
+    </div>
+    <hr />
+    <input type="button" class="btn btn-primary" value="Actualizar producto" @onclick=@Save />
+</EditForm>
 
 @code {
     [Parameter]
@@ -43,7 +44,7 @@
         updateProduct = productService.ItemById(IdProduct);
     }
 
-    private void UpdateProduct()
+    private void Save()
     {
         productService.UpdateItem(updateProduct);
         NavManager.NavigateTo("product/list");

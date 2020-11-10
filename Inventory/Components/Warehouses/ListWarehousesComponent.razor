@@ -3,14 +3,14 @@
 
 @inject ICrudDataService<WarehouseEntity> warehouseService
 
+<h3>Bodega - listado</h3>
 <hr />
-<a href="warehouse/create">Agregar nueva bodega</a>
-<hr />
+
 @if (warehouses == null)
 {
     <p><em>Cargando...</em></p>
 }
-else 
+else
 {
     <table id="categoriesTable" class="display table table-hover table-bordered">
         <thead>
@@ -30,8 +30,12 @@ else
                 </tr>
             }
         </tbody>
-    </table>   
+    </table>
 }
+
+<hr />
+<a href="warehouse/create" class="btn btn-primary">Agregar nueva bodega</a>
+<hr />
 
 @code {
     List<WarehouseEntity> warehouses = new List<WarehouseEntity>();

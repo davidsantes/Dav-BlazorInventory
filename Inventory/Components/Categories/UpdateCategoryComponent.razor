@@ -1,0 +1,48 @@
+﻿@using Entities
+@using Business.Interfaces
+
+@inject NavigationManager NavManager
+@inject ICrudDataService<CategoryEntity> categoryService
+
+<h3>Categoría - actualizar</h3>
+<hr />
+
+<EditForm Model=@updateCategory>
+    <div class="form-group">
+        <label for="name">Nombre de la categoría:</label>
+        <InputText id="name" @bind-Value="updateCategory.CategoryName" class="form-control" />
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="button" class="btn btn-primary" value="Agregar categoría" @onclick="@Save" />
+                <input type="button" class="btn btn-primary" value="Volver" @onclick="@Cancel" />
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public string IdCategory { get; set; }
+
+    CategoryEntity updateCategory = new CategoryEntity();
+    List<CategoryEntity> categories = new List<CategoryEntity>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        updateCategory = categoryService.ItemById(IdCategory);
+    }
+
+    private void Save()
+    {
+        categoryService.UpdateItem(updateCategory);
+        NavManager.NavigateTo("category/list");
+    }
+
+    private void Cancel()
+    {
+        NavManager.NavigateTo("category/list");
+    }
+}
