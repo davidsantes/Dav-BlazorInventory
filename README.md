@@ -1,4 +1,4 @@
-# Proyecto de invetariado hecho con Blazor Server
+# Proyecto de inventariado hecho con Blazor Server
 Pequeño ejemplo CRUD de inventario realizado con Blazor .NET. Simula las entradas y salidas de productos almacenados en bodegas. Estos productos a su vez están clasificados en categorías.
 
 Los puntos tratados en el ejemplo son:
