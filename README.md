@@ -17,7 +17,7 @@ Por otro lado, es importante conocer las [diferencias entre Blazor Server y Blaz
 ### Pre-requisitos 📋
 
 Como herramientas de desarrollo necesitarás:
-* Visual Studio 2019
+* Visual Studio 2019 (con la versión para .NET 5)
 * SQL Server (con la versión Express es suficiente)
 
 ```
